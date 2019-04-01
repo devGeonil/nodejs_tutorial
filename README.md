@@ -121,3 +121,49 @@ Promise resolve, reject,이벤트 리스너의 콜백
         }
       </code>
     </pre>
+
+>5) 노드의 기능
+1. 다음 코드를 통해서 다른 파일에 들어 있는 변수를 사용 할 수 있다.
+ <pre>
+  <code>
+    //var
+    const odd = "odd";
+    const even = "even";
+    module.exports = {odd, even}
+    exports.odd = odd;
+    exports.even = even;
+    //use
+    const {odd , even } = require('./var');
+    console.log(add);
+    console.log(even)
+  </code>
+</pre>
+  <pre>
+   <code>
+     //var
+     export const odd = "odd";
+     export const even = "even";
+     //use
+     import {odd, evem } from "./var"
+     console.log(add);
+     console.log(even)
+   </code>
+  </pre>
+2. global : 새로운 전역 객체
+-> global.something = "value";
+  <pre>
+    <code>
+      //ga.js
+      //export const va = () => global.me
+      exports.va = () => global.me
+      exports.name = "Geonil"
+      //gb.js
+      //import {va} from "./ga"
+      const {name, va} = require("./ga")
+      global.me = "D",
+      console.log(va());
+      console.log(global.me)
+      console.log(name)
+    </code>
+  </pre>
+3.  onsole 객체
