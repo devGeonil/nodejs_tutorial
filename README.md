@@ -77,38 +77,38 @@ Promise resolve, reject,이벤트 리스너의 콜백
       </code>
     </pre>
     <pre>
+      <code>
+        const plus = new Promise((resolve, reject) =>{
+          const a = 1;
+          const b = 2;
+          if(a + b > 2){
+            resolve(a+b);
+          }else{
+            reject(a+b);
+          }
+        });
+        plus
+          .then((success)=>{
+            console.log(success);
+          })
+          .catch((fail)=>{
+            console.log(fail);
+          })
+      </code>
+     </pre>
+      <pre>
         <code>
-          const plus = new Promise((resolve, reject) =>{
-            const a = 1;
-            const b = 2;
-            if(a + b > 2){
-              resolve(a+b);
+          Promise.all([us.d(), ss.so(), s.s()])
+            .then(re => {})
+            .catch((fail)=> console.log(fail);
+            //아래는 예시
+            const k1 = (value) => {if(value === "geonil"){
+            	return Promise.resolve("성공");
             }else{
-              reject(a+b);
-            }
-          });
-          plus
-            .then((success)=>{
-              console.log(success);
-            })
-            .catch((fail)=>{
-              console.log(fail);
-            })
+            	return Promise.reject("실패");
+            }}
         </code>
       </pre>
-      <pre>
-          <code>
-            Promise.all([us.d(), ss.so(), s.s()])
-              .then(re => {})
-              .catch((fail)=> console.log(fail);
-              //아래는 예시
-              const k1 = (value) => {if(value === "geonil"){
-              	return Promise.resolve("성공");
-              }else{
-              	return Promise.reject("실패");
-              }}
-          </code>
-        </pre>
   7. Async / Await
     <pre>
       <code>
