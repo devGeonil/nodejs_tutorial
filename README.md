@@ -243,6 +243,94 @@ Promise resolve, reject,이벤트 리스너의 콜백
     const new = url.parse("https://www.naver.com:80/news?geonil=isHandSomeguy#info")
     //newURL : WAHTWG 방식 - 장점 ?뒤의 부분을 다룰 때 편리하다.
     newUrl.searchParams[.getAll / .get / .has / .keys / .values / .append(key, value) / .set(key, value) / .toString]
-    //new 기존방식
+    //new 기존방식 - 장점 같은 도메인에서 요청을 할 때는 /hello?uq=10 이런 방식으로 처리할 때는 기존의 방식으로 처리를 해야 하기 때문에 둘 다 살아 남아있다.
+    </code>
+  </pre>
+9. querystring module
+  -> 예전의 방법을 사용하는 url parse방식에서 사용하면 편리하다.
+  <pre>
+    <code>
+      const url = require('url');
+      const querystring = require('querystring');
+      const pasedUrl = url.parse("https://www.naver.com/naverpay?query=geonil");
+      const query = querystring.parse(parsedUrl.query);
+      query.stringify(query) // 하나로 합쳐준다.
+    </code>
+  </pre>
+10. crypto 단방향 암호화(해시)
+  -> 다양한 방식의 암호화를 할 때 도와 주는 모듈 입니다.
+  <pre>
+    <code>
+      //1. 비밀번호 암호화 (비밀번호는 보통 복호화를 하지 않는 것을 기본을 합니다.)
+      const crypto = require('crypto');
+      //sha512로 알고리즘을 사용하여 비밀번호를 암호화 하고 base64 방식으로 출력해라
+      crypto.createHash('sha512').update('비밀번호').digest('base64');
+      //2. pbkdf2 암호화: 암호화 시간이 약 1초 걸리때까지 숫자를 올려 주면서 암호화를 시키는 것이 좋다.
+      crypto.randoBytes(64, (err, buf)=>{
+        const salt = buf.toString('base64');
+        crypto.pbkdf2("비밀번호", salt, 1231234, 64, 'sha512', (err, key)=> {
+          key.toString();
+        })
+      })
+    </code>
+  </pre>
+11. 양방향 암호화를
+  -> 복구화를 가능하게 하는 암호화 방법이
+  <pre>
+    <code>
+      const crypto = require('crypto');
+      const cipher = crypto.createCipher('aes-256-cbc',"열쇠");
+      let result = cipher.update("비밀번호", 'utf8', 'base64');
+      result += cipher.final('base64');
+      console.log(result)
+      //복구화
+      const decipher = crypto.createDecipher('aes-256-cbc',"열쇠");
+      let result2 = decipher.update(result, 'base64','utf8');
+      result2+=decipher.final('utf8');
+      console.log(result2);
+    </code>
+  </pre>
+12. util 모(deprecate, promisify)
+  -> deprecate : 지원이 조만간 중단될 메서드임을 알려줄 때 사용합니다.
+  -> ** promisify 콜백을 promise 로 만들어 처리할 수 있다. ( 콜백을 리턴 처리 할 수 있게 만들어 준다.)
+  <pre>
+    <code>
+      const util = require("util");
+      const crypto = require("crypto");
+      <br>
+      const dontuseme = util.deprecate((x, y) => {
+        console.log(x + y);
+      }, '이 함수는 2019년 12월 까지만 사용가능합니다.')
+      //중요한 부분 시작합니다.
+      const randomBytesPromise = util.promisify(crypto.randomBytes);
+      const pbkdf2Promise = util.promisify(ctyto.pbkdf2);
+      randomBytesPromise(64)
+      .then((buf)=>{
+        const salt = buf.toString('base64');
+        return pbkdf2Promise("비밀번호", salt, 1231234, 64, 'sha512')
+      })
+      .then(key => {
+        key.toString();
+      })
+      .catch(error => console.error(error));
+      //위 함수 부분을 async / Await 으로 변경 처리
+      ( async () => {
+        const buf = await randomBytesPromise(64);
+        const salt = buf.toString('base64');
+        const key = await pbkdf2Promise("비밀번호", salt, 1231234, 64, 'sha512')
+        console.log('pass : ', key.toString('base64'));
+      })
+      //////////////////////////////////////////////////
+      /////////////////////////////////////////////////
+      const util = require('util');
+      function fnc1(name , cb){
+        if(name === "geonil"){cb(null,"gseonil")}
+        else{cb(new Error("틀렸지롱"),"wrong")}
+      }
+      const fncPromis = util.promisify(fnc1);
+      (async () => {
+        const a = await fncPromis("geonil");
+        console.log(a);
+      })();
     </code>
   </pre>
