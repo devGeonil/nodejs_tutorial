@@ -28,6 +28,7 @@ nodejs는 (1)이벤트 기반, (2)논 블로킹I/O 모델을 사용해 가볍고
     first();
   </code>
 </pre>
+
 <pre>
   <code>
     //태스크 큐 + 이벤트루프 + 호출스택
@@ -166,4 +167,82 @@ Promise resolve, reject,이벤트 리스너의 콜백
       console.log(name)
     </code>
   </pre>
-3.  onsole 객체
+3.  console 객체
+-> console.time(인자) ~ console.timeEnd(인자) 사이의 시간을 측정한다.
+-> console.dir / console.dir(obj, {color:bool, depth:dep})
+-> console.trace()
+4. 타이머
+  <pre>
+    <code>
+      const timeout = setTimeout(function , 1000) 1초 후에
+      const interval = setInterval(function, 1000) 1초마다
+      clearTimeout(timeout); 해제
+      clearInterval(interval); 해제 하는 함수 입니다.
+      const im = setImmediate(()=> console.log("즉시실행")); //비동기 효솨를 바로 사용하기 위해서 사용하기 위해서 사용한다.
+      clearImmediate(im);
+    </code>
+  </pre>
+5. __filename, __dirname, process
+  -> process : process는 쓰레드 보다 큰 개념 = 하나의 프로그램이라고 생각하면됩니다. 현재 실행중인 자바스크립의 정보를 담고 있습니다.
+    <pre>
+      <code>
+        console.log(__filename); //파일경로
+        console.log(__dirname); // 파일이 들어 있는 경로
+        process.arch() / process.uptime() / process.cwd() / process.execPath() .. 다양한 함수를 제공한다
+        위의 함수를 데스크탑 드로그램을  실행 시킬 때 사용하는 객체.. 음
+        process.exit() // 서비스를 죽일 때 사용할 수 있어요
+        for(let i = 0 ; i < 10000 ; i++){
+            console.log(i);
+            process.exit(); // 0만 축력되고 서비스는 죽는다.
+        }
+      </code>
+    </pre>
+6. os 모듈 운영체제와 관련되 모듈입니다.
+  -> 내장 모듈을 사용!! require() 로 불러 올 수 있습니다
+  <pre>
+    <code>
+      const os = require('os')
+      os.arch();
+      os.type();
+      os.uptime();
+      os.hostname();
+      os.homedir();
+      os.tmpdir();
+      os.freemem();
+      os.cpu();
+    </code>
+  </pre>
+7. path 모듈
+  -> 진짜 많이 사용하게 될 예정입니다!!
+  <pre>
+    <code>
+      const path = require("path");
+      path.sep "\\" // 경로구문자.
+      path.dekimiter ";" // 환경 변수 구분자.
+      path.dirname(___filename); // 실행 파일이 들어 있는 경로
+      path.extname(___filename); // 실행 파일의 확장자
+      path.basename(___filename); // 실행 파일의 이름
+      path.parse(__filename); // 위의 내용을 객체로 던저 준다.
+      path.format(path.parse(__filename)) // 위의 parse 합쳐준다.
+      path.normalize("c:// \\cdccccc \cccd ") // 정상결로로 조합해준다.
+      path.relative("c:\\users\\zeor\\geonil", "c:\\"); 상대 경로를 쉽게 알 수 있다.
+      path.join(__dirname, '..','..','\users','.'\geonil); // 경로를 함쳐 주는 역할 [상위 ,상위 ,user, user에서 ,geonil]로
+      path.resolve(__dirname, '\user') 절대 경로로 친다. C:\\User 로 감
+    </code>
+  </pre>
+8. url 모듈
+  ->주소 관련되 모듈 입니다.
+  -> https : // user : pass @ sub.host.come : 8080 / p/a/t/h ? query=string # haah
+      [protocol | auth(로그인) | hostname | 포트 | path | query | hash]
+      [ ㅡㅡㅡㅡㅡㅡㅡㅡㅡ origin ㅡㅡㅡㅡㅡㅡ :WHATWG 방식 ]
+  <pre>
+    <code>
+    const url = require('url');
+    const URL = url.URL;
+    const newURL = new URL("https://www.naver.com:80/news?geonil=isHandSomeguy#info");
+    const new = url.parse("https://www.naver.com:80/news?geonil=isHandSomeguy#info")
+    //newURL : WAHTWG 방식 - 장점 ?뒤의 부분을 다룰 때 편리하다.
+    newUrl.searchParams[.getAll / .get / .has / .keys / .values / .append(key, value) / .set(key, value) / .toString]
+    //new 기존방식
+    </code>
+  </pre>
