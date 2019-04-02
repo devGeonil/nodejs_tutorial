@@ -1,11 +1,8 @@
-function fnc1(name , cb){
-  if(name === "geonil"){
-    cb(true, "geonil");
-  }else{
-    cb(false, "wrong");
-  }
+exports.fnc1 = function(name , cb){
+  if(name === "geonil"){cb(null,"gseonil")}
+  else{cb(new Error("틀렸지롱"),"wrong")}
 }
 
-module.exports = {
-  fnc1
-}
+// module.exports = {
+//   fnc1
+// }

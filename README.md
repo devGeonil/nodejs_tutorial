@@ -28,7 +28,6 @@ nodejs는 (1)이벤트 기반, (2)논 블로킹I/O 모델을 사용해 가볍고
     first();
   </code>
 </pre>
-
 <pre>
   <code>
     //태스크 큐 + 이벤트루프 + 호출스택
@@ -67,7 +66,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
      var array = [1,23,2,4];
      const [one, two, , four] = array
   6. 콜백과 프로미스 비교
-    프로미스는 결과를 가지고 있지만 밖에 표현을 안해 줬다고 생각하면 편합니다!!
+  -> 프로미스는 결과를 가지고 있지만 밖에 표현을 안해 줬다고 생각하면 편합니다!!
   <pre>
       <code>
         function ff(value, cb){
@@ -77,6 +76,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
         ff("some", (error, value)=>{error, value})
       </code>
     </pre>
+    ->
     <pre>
         <code>
           const plus = new Promise((resolve, reject) =>{
@@ -97,6 +97,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
             })
         </code>
       </pre>
+      ->
       <pre>
           <code>
             Promise.all([us.d(), ss.so(), s.s()])
@@ -111,7 +112,8 @@ Promise resolve, reject,이벤트 리스너의 콜백
           </code>
         </pre>
   7. Async / Await
-  <pre>
+    ->
+    <pre>
       <code>
         async fun(){
           try{
@@ -125,6 +127,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
 
 >5) 노드의 기능
 1. 다음 코드를 통해서 다른 파일에 들어 있는 변수를 사용 할 수 있다.
+ ->
  <pre>
   <code>
     //var
@@ -139,6 +142,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
     console.log(even)
   </code>
 </pre>
+->
   <pre>
    <code>
      //var
@@ -172,6 +176,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
 -> console.dir / console.dir(obj, {color:bool, depth:dep})
 -> console.trace()
 4. 타이머
+    ->
   <pre>
     <code>
       const timeout = setTimeout(function , 1000) 1초 후에
@@ -182,12 +187,12 @@ Promise resolve, reject,이벤트 리스너의 콜백
       clearImmediate(im);
     </code>
   </pre>
-5. __filename, __dirname, process
+5. \_\_filename, \_\_dirname, process
   -> process : process는 쓰레드 보다 큰 개념 = 하나의 프로그램이라고 생각하면됩니다. 현재 실행중인 자바스크립의 정보를 담고 있습니다.
     <pre>
       <code>
-        console.log(__filename); //파일경로
-        console.log(__dirname); // 파일이 들어 있는 경로
+        console.log(\_\_filename); //파일경로
+        console.log(\_\_dirname); // 파일이 들어 있는 경로
         process.arch() / process.uptime() / process.cwd() / process.execPath() .. 다양한 함수를 제공한다
         위의 함수를 데스크탑 드로그램을  실행 시킬 때 사용하는 객체.. 음
         process.exit() // 서비스를 죽일 때 사용할 수 있어요
@@ -219,15 +224,15 @@ Promise resolve, reject,이벤트 리스너의 콜백
       const path = require("path");
       path.sep "\\" // 경로구문자.
       path.dekimiter ";" // 환경 변수 구분자.
-      path.dirname(___filename); // 실행 파일이 들어 있는 경로
-      path.extname(___filename); // 실행 파일의 확장자
-      path.basename(___filename); // 실행 파일의 이름
-      path.parse(__filename); // 위의 내용을 객체로 던저 준다.
-      path.format(path.parse(__filename)) // 위의 parse 합쳐준다.
+      path.dirname(\_\_filename); // 실행 파일이 들어 있는 경로
+      path.extname(\_\_filename); // 실행 파일의 확장자
+      path.basename(\_\_filename); // 실행 파일의 이름
+      path.parse(\_\_filename); // 위의 내용을 객체로 던저 준다.
+      path.format(path.parse(\_\_filename)) // 위의 parse 합쳐준다.
       path.normalize("c:// \\cdccccc \cccd ") // 정상결로로 조합해준다.
       path.relative("c:\\users\\zeor\\geonil", "c:\\"); 상대 경로를 쉽게 알 수 있다.
-      path.join(__dirname, '..','..','\users','.'\geonil); // 경로를 함쳐 주는 역할 [상위 ,상위 ,user, user에서 ,geonil]로
-      path.resolve(__dirname, '\user') 절대 경로로 친다. C:\\User 로 감
+      path.join(\_\_dirname, '..','..','\users','.'\geonil); // 경로를 함쳐 주는 역할 [상위 ,상위 ,user, user에서 ,geonil]로
+      path.resolve(\_\_dirname, '\user') 절대 경로로 친다. C:\\User 로 감
     </code>
   </pre>
 8. url 모듈
@@ -321,7 +326,7 @@ Promise resolve, reject,이벤트 리스너의 콜백
         console.log('pass : ', key.toString('base64'));
       })
       //////////////////////////////////////////////////
-      /////////////////////////////////////////////////
+      ////////////////////////////////////////////////
       const util = require('util');
       function fnc1(name , cb){
         if(name === "geonil"){cb(null,"gseonil")}
