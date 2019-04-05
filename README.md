@@ -183,19 +183,19 @@ Promise resolve, reject,이벤트 리스너의 콜백
   </pre>
 5. __filename, __dirname, process
   -> process : process는 쓰레드 보다 큰 개념 = 하나의 프로그램이라고 생각하면됩니다. 현재 실행중인 자바스크립의 정보를 담고 있습니다.
-    <pre>
-      <code>
-        console.log(__filename); //파일경로
-        console.log(__dirname); // 파일이 들어 있는 경로
-        process.arch() / process.uptime() / process.cwd() / process.execPath() .. 다양한 함수를 제공한다
-        위의 함수를 데스크탑 드로그램을  실행 시킬 때 사용하는 객체.. 음
-        process.exit() // 서비스를 죽일 때 사용할 수 있어요
-        for(let i = 0 ; i < 10000 ; i++){
-            console.log(i);
-            process.exit(); // 0만 축력되고 서비스는 죽는다.
-        }
-      </code>
-    </pre>
+  <pre>
+    <code>
+      console.log(__filename); //파일경로
+      console.log(__dirname); // 파일이 들어 있는 경로
+      process.arch() / process.uptime() / process.cwd() / process.execPath() .. 다양한 함수를 제공한다
+      위의 함수를 데스크탑 드로그램을  실행 시킬 때 사용하는 객체.. 음
+      process.exit() // 서비스를 죽일 때 사용할 수 있어요
+      for(let i = 0 ; i < 10000 ; i++){
+          console.log(i);
+          process.exit(); // 0만 축력되고 서비스는 죽는다.
+      }
+    </code>
+  </pre>
 6. os 모듈 운영체제와 관련되 모듈입니다.
   -> 내장 모듈을 사용!! require() 로 불러 올 수 있습니다
   <pre>
@@ -290,46 +290,230 @@ Promise resolve, reject,이벤트 리스너의 콜백
     </code>
   </pre>
 12. util 모(deprecate, promisify)
-  -> deprecate : 지원이 조만간 중단될 메서드임을 알려줄 때 사용합니다.
-  -> ** promisify 콜백을 promise 로 만들어 처리할 수 있다. ( 콜백을 리턴 처리 할 수 있게 만들어 준다.)
-  <pre>
-    <code>
-      const util = require("util");
-      const crypto = require("crypto");
-      <br>
-      const dontuseme = util.deprecate((x, y) => {
-        console.log(x + y);
-      }, '이 함수는 2019년 12월 까지만 사용가능합니다.')
-      //중요한 부분 시작합니다.
-      const randomBytesPromise = util.promisify(crypto.randomBytes);
-      const pbkdf2Promise = util.promisify(ctyto.pbkdf2);
-      randomBytesPromise(64)
-      .then((buf)=>{
-        const salt = buf.toString('base64');
-        return pbkdf2Promise("비밀번호", salt, 1231234, 64, 'sha512')
-      })
-      .then(key => {
-        key.toString();
-      })
-      .catch(error => console.error(error));
-      //위 함수 부분을 async / Await 으로 변경 처리
-      ( async () => {
-        const buf = await randomBytesPromise(64);
-        const salt = buf.toString('base64');
-        const key = await pbkdf2Promise("비밀번호", salt, 1231234, 64, 'sha512')
-        console.log('pass : ', key.toString('base64'));
-      })
-      //////////////////////////////////////////////////
-      ////////////////////////////////////////////////
-      const util = require('util');
-      function fnc1(name , cb){
-        if(name === "geonil"){cb(null,"gseonil")}
-        else{cb(new Error("틀렸지롱"),"wrong")}
-      }
-      const fncPromis = util.promisify(fnc1);
-      (async () => {
-        const a = await fncPromis("geonil");
-        console.log(a);
-      })();
-    </code>
-  </pre>
+    -> deprecate : 지원이 조만간 중단될 메서드임을 알려줄 때 사용합니다.
+    -> ** promisify 콜백을 promise 로 만들어 처리할 수 있다. ( 콜백을 리턴 처리 할 수 있게 만들어 준다.)
+    <pre>
+      <code>
+        const util = require("util");
+        const crypto = require("crypto");
+        <br>
+        const dontuseme = util.deprecate((x, y) => {
+          console.log(x + y);
+        }, '이 함수는 2019년 12월 까지만 사용가능합니다.')
+        //중요한 부분 시작합니다.
+        const randomBytesPromise = util.promisify(crypto.randomBytes);
+        const pbkdf2Promise = util.promisify(ctyto.pbkdf2);
+        randomBytesPromise(64)
+        .then((buf)=>{
+          const salt = buf.toString('base64');
+          return pbkdf2Promise("비밀번호", salt, 1231234, 64, 'sha512')
+        })
+        .then(key => {
+          key.toString();
+        })
+        .catch(error => console.error(error));
+        //위 함수 부분을 async / Await 으로 변경 처리
+        ( async () => {
+          const buf = await randomBytesPromise(64);
+          const salt = buf.toString('base64');
+          const key = await pbkdf2Promise("비밀번호", salt, 1231234, 64, 'sha512')
+          console.log('pass : ', key.toString('base64'));
+        })
+        //////////////////////////////////////////////////
+        ////////////////////////////////////////////////
+        const util = require('util');
+        function fnc1(name , cb){
+          if(name === "geonil"){cb(null,"gseonil")}
+          else{cb(new Error("틀렸지롱"),"wrong")}
+        }
+        const fncPromis = util.promisify(fnc1);
+        (async () => {
+          const a = await fncPromis("geonil");
+          console.log(a);
+        })();
+      </code>
+    </pre>
+>13. fs 모둘 (동기와 비동기)
+    -> 파일 시스템을 사용해 봅니다. (프론드 자바스크립트의 경우는 파일에 접근이 불가능 하나, nodejs 는 파일에 접근이 가능하다.)
+    <pre>
+      <code>
+        //파일 읽기
+        const fs = require('fs');
+        fs.readFile('./readme.txt', (err, data)=> {
+          if(err){throw err}
+          else{
+            //버퍼가 출력 됩니다.
+            console.log(data)
+            //사람이 알아 듣는 코드로 바꾸기 위해서
+            console.log(data.toString());
+          }
+        })
+        <br>
+        //파일 만들기
+        const fs = require('fs');
+        fs.writeFile('./writeme.txt','글을 써주세요!!' , err =>{
+          if(err)
+            throw err;
+          fs.readFile('./writeme.txt', (err, data)=>{
+            if(err)
+              throw err;
+            console.log(data.toString());
+          })
+        })
+        //위는 비동기 방식으로 아래는 동기 방식으로 코딩 합니다.
+        const fs = require('fs');
+        console.log('start');
+        fs.readFile('./readme.txt', (err, data)=>{
+          if(err)
+            throw err
+          console.log(`1 : ${data.toString()}`);
+        })
+        fs.readFile('./readme.txt', (err, data)=>{
+          if(err)
+            throw err
+          console.log(`2 : ${data.toString()}`);
+        })
+        fs.readFile('./readme.txt', (err, data)=>{
+          if(err)
+            throw err
+          console.log(`3 : ${data.toString()}`);
+        })
+        console.log('end')
+        // 위의 코드는 비동기 배소드기 때문에 아래 비동기 방식으로 바꿔 볼게요!!
+        //1) 콜백헬을 만들기...
+        const fs = require('fs');
+        console.log('start');
+        fs.readFile('./readme.txt', (err, data)=>{
+          if(err)
+            throw err
+          console.log(`1 : ${data.toString()}`);
+          fs.readFile('./readme.txt', (err, data)=>{
+            if(err)
+              throw err
+            console.log(`2 : ${data.toString()}`);
+            fs.readFile('./readme.txt', (err, data)=>{
+              if(err)
+                throw err
+              console.log(`3 : ${data.toString()}`);
+              console.log('end')
+            })
+          })
+        })
+        //FileSync함수를 사용하기! 그럴때는 반환 값이 있고, 콜백형식을 사용하지 않습니다.
+        const fs = require('fs');
+        console.log('start');
+        let data = fs.readFileSync('./readme.txt');
+        console.log(`1 ${data.toString()}`);
+        data = fs.readFileSync('./readme.txt');
+        console.log(`2 ${data.toString()}`);
+        data = fs.readFileSync('./readme.txt');
+        console.log(`3 ${data.toString()}`);
+        console.log('end')
+      </code>
+    </pre>
+  >15. 버퍼와 스트림
+    -> readFile을 하게 되면 버퍼를 받아 오게 됩니다.
+    -> 버퍼란? 큰 데이터를 한 번에 보낼 수 없기 때문에 데이터를 작은 저장 공간을 사용하여 전달!! Data -> b/u/f/f/e/r(나누어진 조각을chunk 라 한다 -버퍼링) ----> DATA
+    -> 스트림이란? : 버퍼가 이어지면 스트림(버퍼 + 버퍼 + 버퍼링 <---- data)이 됩니다.
+    <pre>
+      <code>
+        const fs = require('fs');
+        //읽는 스트림을 한다. ( 몇 바이트씩 읽을 것인가 highWaterMark 적어준다.)
+        //16 바이트 버퍼를 패우면 읽는다.
+        const readStream = fs.createReadStream('./readme.txt', {highWaterMark:16});
+        const data = [];
+        //16 버이트 읽을 때마다. data 이벤트가 발생한다.
+        readStream.on('data', (chunk)=>{
+          data.push(chunk);
+          console.log('data : ' , chunk , "----", chunk.length);
+        })
+        //Buffer 노드 글로벌 객체 입니다.
+        //concat(배열) 버퍼를 하나로 뭉친다.
+        //toString() 버퍼를 읽을 수 있는 문자로 변경 한다.
+        readStream.on('end', ()=>{
+          console.log('end : ', Buffer.concat(data).toString());
+        })
+        readStream.on('error', err => {
+          console.log('err : '+err);
+        })
+      </code>
+    </pre>
+    -> 버퍼를 이용한 파일 쓰기
+    <pre>
+      <code>
+        const fs = require('fs');
+        const writeStream = fs.createWriteStream('./writeme2.txt');
+        writeStream.on('finish', ()=>{
+          console.log('파일 쓰기 완료되었습니다.');
+        })
+        writeStream.write("이 글을 씁니다\n");
+        writeStream.write("한 번 더 씁니다.");
+        //end 메서드를 실행 하면 finish 되니다.
+        writeStream.end();
+      </code>
+    </pre>
+    -> 파일 복사 하기
+    <pre>
+      <code>
+        const fs = require('fs');
+        // 파일을 복사하는 방법 (1)
+        const readStream = fs.createReadStream('./readme.txt');
+        const writeStream = fs.createWriteStream('./writeme3.txt');
+        readStream.pipe(writeStream);
+        // 파일을 복사하는 방법 (2)
+        const redStream = fs.copyFile('./readme.txt', './writeme7.txt', err =>{
+          console.log(err);
+        })
+      </code>
+    </pre>
+    -> 파일 압축해서 쓰디
+    <pre>
+      <code>
+        const fs = require('fs');
+        //파일 압축해서 쓰기
+        const zlib = require('zlib');
+        const zlibStream = zlib.createGzip();
+        const readStream = fs.createReadStream('./readme.txt');
+        const writeStream = fs.createWriteStream('./writeme5.txt');
+        //pip는 파일을 연달아 쓸 수 있으며, 해당 코드는 파일을 압축해서 쓰는 것을 의미한다.
+        readStream.pipe(zlibStream).pipe(writeStream)
+      </code>
+    </pre>
+    -> 파일 모듈 추가 기능
+    <pre>
+      <code>
+        const fs = require('fs');
+        fs.access('./folder', fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK, err => {
+          if(err){
+            if(err.code === 'ENOENT'){
+                console.log('폴더없음.');
+                fs.mkdir('./folder', error => {
+                  if(err)
+                    throw err;
+                  console.log('폴더 만들기 성공');
+                  fs.open('./folder/file.js', w , (err,fd)=>{
+                    if(err)
+                      throw err;
+                    console.log('빈 파일 만들기 성공', fd);
+                    fs.rename('./folder/file.js', './folder/newfile.js', err => {
+                      if(err)
+                        throw err;
+                      cosole.log('이름 바꾸기 성공');
+                    })
+                  })
+                })
+            }else{
+              console.log('폴더가 이미 있습니다.');
+            }
+          }else{
+            console.log('에러없음')
+          }
+        })
+      </code>
+    </pre>
+  >16. 이벤트
+    -> 미리 이벤트리스너를 만들어 두고,
+      (이벤트 리스너는 특정 이벤트가 발생했을 때 어떤동작을할지 정희하느 부분)
+      ex) 사람들이 서버에 방문 (이벤트) 하면 html 파일을 줄거야.
+      <pre>
+      <CODE>
