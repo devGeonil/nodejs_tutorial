@@ -1,20 +1,25 @@
-const EventEmitter = require('events');
-const myEvent = new EventEmitter();
-
-//addListener == on
-myEvent.addListener('방문', ()=>{
-  console.log('방문해주셔서 감사합니다.');
+const http = require('http');
+const fs = require('fs');
+const server = http.createServer((req, res) => {
+  console.log('서버 실행')
+  if(req.url.startsWith('/login')){
+  }else{
+    console.log(req.headers.cookie)
+    fs.readFile('./server.html', (err, data)=>{
+      if(err)
+        throw err
+      res.writeHead(200,{ Location: '/','Set-Cookie':'mycookie=test'});
+      res.end(data); //브라우저가 알아서  버퍼를 변환 처리 해줍니다.
+      //axios.get('www.google.com');  이렇게 구글에 요청을 보낼 수 있는데 이게 뭔지는 아직 모르겠당
+    })
+  }
 })
-myEvent.on('종료', ()=>{
-  console.log('byebye');
+server.listen(8081, ()=>{
+  console.log('8081 port에서 실행됩니다');
+});
+// server.on('listening', ()=>{
+//   console.log('8081 port ');
+// })
+server.on('err', (error)=>{
+  console.error(error);
 })
-myEvent.on('종료', ()=>{
-  console.log('see you never!!');
-})
-myEvent.once('특별이벤트', ()=>{
-  console.log('한 번만 실행됩니다.');
-}
-//The way custom event sue
-myEvent.emit('방문');
-myEvent.emit('종료');
-//The way custom events remove 

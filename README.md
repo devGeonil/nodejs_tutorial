@@ -516,4 +516,175 @@ Promise resolve, reject,이벤트 리스너의 콜백
       (이벤트 리스너는 특정 이벤트가 발생했을 때 어떤동작을할지 정희하느 부분)
       ex) 사람들이 서버에 방문 (이벤트) 하면 html 파일을 줄거야.
       <pre>
-      <CODE>
+        <code>
+          const EventEmitter = require('events');
+          const myEvent = new EventEmitter();
+          //addListener == on
+          myEvent.addListener('방문', ()=>{
+            console.log('방문해주셔서 감사합니다.');
+          })
+          myEvent.on('종료', ()=>{
+            console.log('byebye');
+          })
+          myEvent.on('종료', ()=>{
+            console.log('see you never!!');
+          })
+          myEvent.once('특별이벤트', ()=>{
+            console.log('한 번만 실행됩니다.');
+          }
+          //The way custom event sue
+          myEvent.emit('방문');
+          myEvent.emit('종료');
+          //The way custom events remove
+          myEvent.removeListener('이벤트명', '동일 이벤트 명에 여러개의 이벤트가 있다면 해당 이벤트의 콜백을 별도의 함수로 만들고 그 콜백의 이름을 적어준다.')
+        </code>
+      </pre>
+    >17. 예외 처리하기!!
+     -> 예외란? 미차 처리하지 못 한 에러를 말합니다 (이러한 에러가 발생하면 프로그램이 죽어 버린다.... 이런.. node는 싱글 쓰레드 이기 때문에)
+     <pre>
+      <code>
+        process.on('uncaughtException', (err)=>{
+          console.log('예기치 모한 에러',err);
+        })
+        setInterval(()=>{
+          console.log('start');
+          //아예 이런 상황을 만들지 않게 하는 것이 좋다. 권장 하는 방법은 아닙니다.
+          try{
+            throw new Error('에러발생!')
+          }catch(err){
+            console.log(err);
+          }
+        },1000)
+        setTimeout(()=>{
+          console.log('실행됩니다.');
+        },2000)
+      </code>
+     </pre>
+    >18. http 모듈, localhost, 포트(HTTP 80 / HTTPS 443 / TEST 8080Q      )
+      -> node로 서버를 만들어 봅니다!
+      <pre>
+        <code>
+          const http = require('http');
+          http.createServer((req, res) => {
+            console.log('서버 실행')
+            res.write('<h1>Hello Node!</h1>')
+            res.end('<p>write 하는 동시에 끝 을알려 주기 위해서 end를 쓴다</p>')
+          }).listen(8080, () => {
+            console.log('port : 8080')
+          })
+        </code>
+      </pre>
+    >19. 응답으로 파일 읽어 보내기
+      -> 똑똑한 브라우저 버퍼를 알아서 해석해줘요!
+      <pre>
+        <code>
+          const http = require('http');
+          const fs = require('fs');
+          const server = http.createServer((req, res) => {
+            console.log('서버 실행')
+            fs.readFile('./server.html', (err, data)=>{
+              if(err)
+                throw err
+              res.write(data); //브라우저가 알아서  버퍼를 변환 처리 해줍니다.
+              //axios.get('www.google.com');  이렇게 구글에 요청을 보낼 수 있는데 이게 뭔지는 아직 모르겠당
+            })
+          }).listen(8081);
+          server.on('listening', ()=>{
+            console.log('8081 port ');
+          })
+          server.on('err', (error)=>{
+            console.error(error);
+          })
+        </code>
+      </pre>
+    >20. 쿠키 설정하기, req.url
+      -> 클라이언드와 서버간에 데이터를 주고 받는 방식! (쿠키, 세션)
+      <pre>
+        <code>
+          //가장 쉬운 데이터 전달 방법 1) 쿠키!!
+          const http = require('http');
+          const server = http.createServer((req, res)=>{
+            //req.header.cookie;
+            //응답 : 200(성공) , 400s(실패)
+            res.writeHead(200,{'Set-Cookie':'mycookie=test'})
+          })
+          server.listen(8080)
+          //////////////////////
+          const http = require('http');
+          const fs = require('fs');
+          const server = http.createServer((req, res) => {
+              console.log('서버 실행')
+              fs.readFile('./server.html', (err, data)=>{
+                if(err)
+                  throw err
+                console.log(req.url ,req.headers.cookie);
+                res.writeHead(200,{'Set-Cookie':'mycookie=test'});
+                res.end(data); //브라우저가 알아서  버퍼를 변환 처리 해줍니다.
+                //axios.get('www.google.com');  이렇게 구글에 요청을 보낼 수 있는데 이게 뭔지는 아직 모르겠당
+              })
+            })
+            server.listen(8081, ()=>{
+              console.log('8081 port에서 실행됩니다');
+            });
+            // server.on('listening', ()=>{
+            //   console.log('8081 port ');
+            // })
+            server.on('err', (error)=>{
+              console.error(error);
+            })
+        </code>
+      </pre>
+    >21. 라우터 분기 처리와 쿠키
+      ->
+      <pre>
+        <code>
+          const http = require('http');
+          const fs = require('fs');
+          const server = http.createServer((req, res) => {
+            console.log('서버 실행')
+            if(req.url.startsWith('/login')){
+            }else{
+              console.log(req.headers.cookie)
+              fs.readFile('./server.html', (err, data)=>{
+                if(err)
+                  throw err
+                res.writeHead(200,{ Location: '/','Set-Cookie':'mycookie=test'});
+                res.end(data); //브라우저가 알아서  버퍼를 변환 처리 해줍니다.
+                //axios.get('www.google.com');  이렇게 구글에 요청을 보낼 수 있는데 이게 뭔지는 아직 모르겠당
+              })
+            }
+          })
+          server.listen(8081, ()=>{
+            console.log('8081 port에서 실행됩니다');
+          });
+          // server.on('listening', ()=>{
+          //   console.log('8081 port ');
+          // })
+          server.on('err', (error)=>{
+            console.error(error);
+          })
+        </code>
+      </pre>
+    >21. session
+      -> 쿠키의 문제를 보완하기위하여 세션을 사용! 브라우저에서 확인 불가능(메모르 세션)
+      <pre>
+        <code>
+          const sesstion = {};
+          const expires = new Data()+5 ;
+          const randomInt = +new Date();
+          session[randomInt] = {
+            name,
+            expires,
+            age,
+            gender
+          }
+          res.header(200, 'Set-Cookie':'session=${randomInt}')
+          //
+          if(session[cookie.session].expires > new Date()){
+              dosomething
+          }
+        </code>
+      </pre>
+    >22. Rest API
+      -> 서버의 자원을 주소를 통해서 가져오는 방법
+      -> get(사용자 가져오기) post(등록하기) put(전체변경) patch(부분변경) delete (지우기)
