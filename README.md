@@ -688,3 +688,23 @@ Promise resolve, reject,이벤트 리스너의 콜백
     >22. Rest API
       -> 서버의 자원을 주소를 통해서 가져오는 방법
       -> get(사용자 가져오기) post(등록하기) put(전체변경) patch(부분변경) delete (지우기)
+      <pre>
+        <code>
+          // GET www.geonil.com/users
+          // POST www.geonil.com/users
+          // PUT www.geonil.com/users/1
+          // PATCH www.geonil.com/users/2
+          // DELETE www.geonil.com/users/4
+        </code>
+      </pre>
+    >23. Rest API
+      -> express 없이 REST API 만들어 보기
+      <pre>
+        <code>
+          // GET www.geonil.com/users
+          // POST www.geonil.com/users
+          // PUT www.geonil.com/users/1
+          // PATCH www.geonil.com/users/2
+          // DELETE www.geonil.com/users/4
+        </code>
+      </pre>
