@@ -5,8 +5,28 @@ const users = {
   name:"Geonil"
 };
 
+const router = {
+  get:{
+    '/':()=>{
+
+    },
+    '/users' : ()=>{
+
+    }
+  },
+  post:{
+
+  },
+  patch:{
+
+  },
+  put:{
+    '/users':()=>{}
+  }
+}
 
 http.createServer((req, res) =>{
+  //router[req.method.toLowerCase()][req.url];
   if(req.method === 'GET'){
     if(req.url === '/'){
       return fs.readFile('./server.html', (err, data)=>{

@@ -697,14 +697,51 @@ Promise resolve, reject,이벤트 리스너의 콜백
           // DELETE www.geonil.com/users/4
         </code>
       </pre>
-    >23. Rest API
-      -> express 없이 REST API 만들어 보기
+    >23. http/ http2
+      -> https(기본적으로 암호화가 이루어져 있다!)
       <pre>
         <code>
-          // GET www.geonil.com/users
-          // POST www.geonil.com/users
-          // PUT www.geonil.com/users/1
-          // PATCH www.geonil.com/users/2
-          // DELETE www.geonil.com/users/4
+        //lets encrypt (무료 인증서 발급)
+          const http2 = require('http2') == https
+          const https = require('https');
+          https.createServer({
+            cert:fs.readFileSync('도메인 인증서 경로'),
+            key:fs.readFileSync('도메인 비밀키 경로'),
+            ca:[
+              rs.readFileSync('상위 인증서 경로')
+            ]
+          },(req, res)=>{
+            console.log('Https server')
+          }).listen(443)
+        </code>
+      </pre>
+    >24. cluster로 멀티 프로세싱하기
+      -> node는 싱글 쓰레드를 지원하기 떄문에 놀고 있는 코어를 다 사용할 수 있도록 처리가 필요합니다.
+      <pre>
+        <code>
+        //cluster 에는 master 프로세스와 worker프로 세스가 있습니다. cluster.fork()가 워커를 만듭니다.
+          const cluster = require('cluster');
+          const os = require('os');
+          const numCPU = os.cpus().length;
+          const http = require('http');
+          if(cluster.isMaster){
+              console.log('마스터 프로세스 아이디 ',process.pid)
+              for(let i = 0 ; i < numCPU; i++){
+                cluster.fork();
+              }
+              cluster.on('exit',(worker, code, signal)=>{
+                console.log(worker.process.pid,'worker die');
+                //cluster.fork();
+              })
+          }else {
+          //worker
+            http.createServer((req, res)=>{
+              res.end('http server');
+              setTimeout(()=>{
+                process.exit(1);
+              },1000)
+            }).listen(8080);
+            console.log(process.pid, 'start worker')
+          }   
         </code>
       </pre>

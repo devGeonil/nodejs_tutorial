@@ -1,0 +1,25 @@
+{
+  "name": "npmtest-jgi-0001",
+  "version": "1.0.0",
+  "description": "npm tutorial",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "Geonil",
+  "license": "MIT",
+  "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "express-session": "^1.16.0",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "express": "^4.16.4",
+    "jest": "^24.7.1",
+    "nodemon": "^1.18.11"
+  }
+}
