@@ -745,3 +745,10 @@ Promise resolve, reject,이벤트 리스너의 콜백
           }   dd
         </code>
       </pre>
+    >25. Sequelize
+      -> npm i -g sequelize sequelize-cli mysql2
+      -> sequelize init
+      <pre>
+        <code>
+        </code>
+      </pre>
